@@ -138,28 +138,6 @@ set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 
-# ------------------------ #
-#   Collect OS libraries   #
-# ------------------------ #
-if (WIN32)
-  # Link the Winsock library
-  find_library(SetupApi REQUIRED
-          NAMES setupapi)
-  find_library(Ws2_32 REQUIRED
-          NAMES ws2_32)
-  find_library(WinUsb REQUIRED
-          NAMES winusb)
-  list(APPEND OsLibs
-          ${SetupApi}
-          ${Ws2-32}
-          ${WinUsb})
-elseif (UNIX)
-  find_library(Dl REQUIRED
-          NAMES dl)
-  list(APPEND OsLibs
-          ${Dl})
-endif ()
-
 #***************************************************************************************
 # Targets
 #****************************************************************************************
