@@ -203,6 +203,9 @@ endif ()
 # Unix, you need to also link the LibUsb and LibDL libraries by adding usb-1.0 and dl to
 # the linker library dependencies. Under Windows, you need to also link the Winsock
 # library by adding ws2_32 to the linker library dependencies.
+# ------------------ #
+#   OpenBlt object   #
+# ------------------ #
 add_library(openblt OBJECT)
 add_library(openblt::obj ALIAS openblt)
 
@@ -214,33 +217,34 @@ target_link_libraries(openblt
         PkgConfig::libusb
         ${OsLibs})
 
-if(BUILD_STATIC)
-  add_library(openblt_static STATIC)
-  add_library(openblt::static ALIAS openblt_static)
-  target_link_libraries(openblt_static
-          PUBLIC openblt)
-  set_target_properties(openblt_static PROPERTIES
-          OUTPUT_NAME openblt
-          CLEAN_DIRECT_OUTPUT 1)
-endif(BUILD_STATIC)
+# ------------------ #
+#   OpenBlt static   #
+# ------------------ #
+add_library(openblt_static STATIC)
+add_library(openblt::static ALIAS openblt_static)
 
-# Only generate the shared library taget if the option is enabled. Use 
-# "make openblt_shared" to build individually  shared library.
-if(BUILD_SHARED)
-  add_library(openblt_shared)
-  add_library(openblt::shared ALIAS openblt_shared)
-  if(CMAKE_C_COMPILER_ID MATCHES MSVC)
-    # Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
-    # (including MinGW) does. Correct this here.
-    set_target_properties(openblt_shared PROPERTIES
-            OUTPUT_NAME libopenblt
-            CLEAN_DIRECT_OUTPUT 1)
-  else()
-    set_target_properties(openblt_shared PROPERTIES
-            OUTPUT_NAME openblt
-            CLEAN_DIRECT_OUTPUT 1)
-  endif()
-endif(BUILD_SHARED)
+target_link_libraries(openblt_static
+        PUBLIC openblt)
+
+set_target_properties(openblt_static PROPERTIES
+        OUTPUT_NAME openblt
+        CLEAN_DIRECT_OUTPUT 1)
+
+# ------------------ #
+#   OpenBlt shared   #
+# ------------------ #
+# Use "make openblt_shared" to build individually  shared library.
+add_library(openblt_shared SHARED)
+add_library(openblt::shared ALIAS openblt_shared)
+
+target_link_libraries(openblt_shared
+        PUBLIC openblt)
+
+# Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
+# (including MinGW) does. Correct this here.
+set_target_properties(openblt_shared PROPERTIES
+        OUTPUT_NAME $<$<STREQUAL:${CMAKE_C_COMPILER_ID},MSVC>:lib>openblt
+        CLEAN_DIRECT_OUTPUT 1)
 
 # Only generate the PC-lint taget if the option is enabled. Use "make openblt_LINT" to 
 # lint the project sources
