@@ -11,11 +11,12 @@ find_library(WinUsb REQUIRED
         NAMES winusb)
 
 add_library(OsLibs INTERFACE)
+add_library(openblt::osLibs ALIAS OsLibs)
 
 target_link_libraries(OsLibs
         INTERFACE
         ${SetupApi}
-        ${Ws2-32}
+        ${Ws2_32}
         ${WinUsb})
 
 # ---------------- #
@@ -38,7 +39,7 @@ target_include_directories(openblt_port
         ${CMAKE_CURRENT_SOURCE_DIR}/canif/vector)
 
 target_link_libraries(openblt_port
-        PUBLIC OsLibs)
+        PUBLIC openblt::osLibs)
 
 target_compile_definitions(openblt_port
         PUBLIC

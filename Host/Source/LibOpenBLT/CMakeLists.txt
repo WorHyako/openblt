@@ -88,16 +88,33 @@ add_library(openblt OBJECT)
 add_library(openblt::obj ALIAS openblt)
 
 target_include_directories(openblt
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        $<$<BOOL:WIN32>:${CMAKE_CURRENT_SOURCE_DIR}/port/windows>
+        $<$<BOOL:WIN32>:${CMAKE_CURRENT_SOURCE_DIR}/port/windows/canif/ixxat>
+        $<$<BOOL:WIN32>:${CMAKE_CURRENT_SOURCE_DIR}/port/windows/canif/kvaser>
+        $<$<BOOL:WIN32>:${CMAKE_CURRENT_SOURCE_DIR}/port/windows/canif/lawicel>
+        $<$<BOOL:WIN32>:${CMAKE_CURRENT_SOURCE_DIR}/port/windows/canif/peak>
+        $<$<BOOL:WIN32>:${CMAKE_CURRENT_SOURCE_DIR}/port/windows/canif/vector>
+        $<$<BOOL:UNIX>:${CMAKE_CURRENT_SOURCE_DIR}/port/linux>
+        $<$<BOOL:UNIX>:${CMAKE_CURRENT_SOURCE_DIR}/port/linux/canif/socketcan>)
 
 file(GLOB Sources ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+if (WIN32)
+    file(GLOB_RECURSE PortSources port/windows/*.c)
+elseif (UNIX)
+    file(GLOB_RECURSE PortSources port/linux/*.c)
+endif ()
+
 target_sources(openblt
-        PRIVATE ${Sources})
+        PRIVATE
+        ${Sources}
+        ${PortSources})
 
 target_link_libraries(openblt
         PUBLIC
         PkgConfig::libusb
-        openblt::port)
+        openblt::osLibs)
 
 # ---------------- #
 #   Lint targets   #

@@ -9,7 +9,7 @@ elseif (CMAKE_C_COMPILER_ID MATCHES MSVC)
 endif ()
 
 if(WIN32)
-    set(PlatformFlag "-D_CRT_SECURE_NO_WARNINGS")
+#    set(PlatformFlag "-D_CRT_SECURE_NO_WARNINGS")
 elseif (UNIX)
     set(PlatformFlag "-pthread")
 endif ()
