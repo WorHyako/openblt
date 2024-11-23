@@ -159,7 +159,7 @@ target_sources(openblt
 target_link_libraries(openblt
         PUBLIC
         PkgConfig::libusb
-        ${OsLibs})
+        openblt::port)
 
 # ------------------ #
 #   OpenBlt static   #
