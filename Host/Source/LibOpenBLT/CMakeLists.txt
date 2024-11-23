@@ -154,11 +154,6 @@ if (WIN32)
           ${Ws2-32}
           ${WinUsb})
 elseif (UNIX)
-  # Under Unix the LibUsb library (http://libusb.info/) is needed for the USB support.
-  # Make sure the libusb-1.0-0 and  libusb-1.0-0-dev packages are installed to be able
-  # to build LibOpenBLT. Example under Debian/Ubuntu:
-  #   sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev
-  # Additionally, the LibDL is needed for dynamic library loading.
   find_library(Dl REQUIRED
           NAMES dl)
   list(APPEND OsLibs
