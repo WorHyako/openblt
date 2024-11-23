@@ -39,3 +39,8 @@ target_include_directories(openblt_port
 
 target_link_libraries(openblt_port
         PUBLIC OsLibs)
+
+target_compile_definitions(openblt_port
+        PUBLIC
+        PLATFORM_WINDOWS
+        $<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},4>,PLATFORM_32BIT,PLATFORM_64BIT>)

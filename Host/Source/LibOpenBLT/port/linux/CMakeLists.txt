@@ -7,8 +7,8 @@ find_library(Dl REQUIRED
         NAMES dl)
 add_library(OsLibs INTERFACE)
 
-target_link_libraries(OsLibs INTERFACE
-        ${Dl})
+target_link_libraries(OsLibs
+        INTERFACE ${Dl})
 
 # ---------------- #
 #   OpenBlt port   #
@@ -27,3 +27,8 @@ target_include_directories(openblt_port
 
 target_link_libraries(openblt_port
         PUBLIC OsLibs)
+
+target_compile_definitions(openblt_port
+        PUBLIC
+        PLATFORM_LINUX
+        $<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},4>,PLATFORM_32BIT,PLATFORM_64BIT>)

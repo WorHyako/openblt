@@ -102,7 +102,7 @@ target_link_libraries(openblt
 # ---------------- #
 #   Lint targets   #
 # ---------------- #
-include(lint)
+add_subdirectory(lint)
 
 # ------------------ #
 #   OpenBlt static   #
