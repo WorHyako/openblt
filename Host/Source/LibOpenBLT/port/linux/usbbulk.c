@@ -34,7 +34,7 @@
 #include <stddef.h>                         /* for NULL declaration                    */
 #include <stdbool.h>                        /* for boolean type                        */
 #include "usbbulk.h"                        /* USB bulk driver                         */
-#include <libusb-1.0/libusb.h>              /* LibUsb 1.0 driver                       */
+#include <libusb.h>                         /* LibUsb 1.0 driver                       */
 
 
 /****************************************************************************************

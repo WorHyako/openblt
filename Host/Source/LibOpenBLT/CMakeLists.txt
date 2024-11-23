@@ -176,10 +176,11 @@ set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 # Note that when you link your own application to the static library of LibOpenBLT under
 # Unix, you need to also link the LibUsb and LibDL libraries by adding usb-1.0 and dl to
 # the linker library dependencies. Under Windows, you need to also link the Winsock
-# library by adding ws2_32 to the linker library dependencies. 
+# library by adding ws2_32 to the linker library dependencies.
 if(BUILD_STATIC)
   add_library(openblt_static STATIC ${LIB_SRCS})
   SET_TARGET_PROPERTIES(openblt_static PROPERTIES OUTPUT_NAME openblt CLEAN_DIRECT_OUTPUT 1)
+  target_link_libraries(openblt_static PUBLIC PkgConfig::libusb)
 endif(BUILD_STATIC)
 
 # Only generate the shared library taget if the option is enabled. Use 

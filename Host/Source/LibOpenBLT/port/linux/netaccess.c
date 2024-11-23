@@ -304,7 +304,7 @@ bool NetAccessReceive(uint8_t * data, uint32_t * length, uint32_t timeout)
     if (netAccessSocket >= 0)
     {
       /* Configure the timeout for the receive operation. */
-      tv.tv_sec = (__time_t)(timeout / 1000u);
+      tv.tv_sec = (__darwin_time_t)(timeout / 1000u);
       tv.tv_usec = (timeout % 1000u) * 1000u;
       if (setsockopt(netAccessSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(struct timeval)) >= 0)
       {
