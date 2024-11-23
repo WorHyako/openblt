@@ -167,6 +167,32 @@ set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 
+# ------------------------ #
+#   Collect OS libraries   #
+# ------------------------ #
+if (WIN32)
+  # Link the Winsock library
+  find_library(SetupApi REQUIRED
+          NAMES setupapi)
+  find_library(Ws2_32 REQUIRED
+          NAMES ws2_32)
+  find_library(WinUsb REQUIRED
+          NAMES winusb)
+  list(APPEND OsLibs
+          ${SetupApi}
+          ${Ws2-32}
+          ${WinUsb})
+elseif (UNIX)
+  # Under Unix the LibUsb library (http://libusb.info/) is needed for the USB support.
+  # Make sure the libusb-1.0-0 and  libusb-1.0-0-dev packages are installed to be able
+  # to build LibOpenBLT. Example under Debian/Ubuntu:
+  #   sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev
+  # Additionally, the LibDL is needed for dynamic library loading.
+  find_library(Dl REQUIRED
+          NAMES dl)
+  list(APPEND OsLibs
+          ${Dl})
+endif ()
 
 #***************************************************************************************
 # Targets
@@ -177,33 +203,42 @@ set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 # Unix, you need to also link the LibUsb and LibDL libraries by adding usb-1.0 and dl to
 # the linker library dependencies. Under Windows, you need to also link the Winsock
 # library by adding ws2_32 to the linker library dependencies.
+add_library(openblt OBJECT)
+add_library(openblt::obj ALIAS openblt)
+
+target_sources(openblt
+        PRIVATE ${LIB_SRCS})
+
+target_link_libraries(openblt
+        PUBLIC
+        PkgConfig::libusb
+        ${OsLibs})
+
 if(BUILD_STATIC)
-  add_library(openblt_static STATIC ${LIB_SRCS})
-  SET_TARGET_PROPERTIES(openblt_static PROPERTIES OUTPUT_NAME openblt CLEAN_DIRECT_OUTPUT 1)
-  target_link_libraries(openblt_static PUBLIC PkgConfig::libusb)
+  add_library(openblt_static STATIC)
+  add_library(openblt::static ALIAS openblt_static)
+  target_link_libraries(openblt_static
+          PUBLIC openblt)
+  set_target_properties(openblt_static PROPERTIES
+          OUTPUT_NAME openblt
+          CLEAN_DIRECT_OUTPUT 1)
 endif(BUILD_STATIC)
 
 # Only generate the shared library taget if the option is enabled. Use 
 # "make openblt_shared" to build individually  shared library.
 if(BUILD_SHARED)
-  add_library(openblt_shared SHARED ${LIB_SRCS})
-  if(UNIX)
-    # Under Unix the LibUsb library (http://libusb.info/) is needed for the USB support.
-    # Make sure the libusb-1.0-0 and  libusb-1.0-0-dev packages are installed to be able
-    # to build LibOpenBLT. Example under Debian/Ubuntu:
-    #   sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev
-    # Additionally, the LibDL is needed for dynamic library loading.
-    target_link_libraries(openblt_shared usb-1.0 dl)
-  elseif(WIN32)
-    # Link the Winsock library
-    target_link_libraries(openblt_shared ws2_32 winusb setupapi)
-  endif(UNIX)  
+  add_library(openblt_shared)
+  add_library(openblt::shared ALIAS openblt_shared)
   if(CMAKE_C_COMPILER_ID MATCHES MSVC)
     # Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
     # (including MinGW) does. Correct this here.
-    SET_TARGET_PROPERTIES(openblt_shared PROPERTIES OUTPUT_NAME libopenblt CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(openblt_shared PROPERTIES
+            OUTPUT_NAME libopenblt
+            CLEAN_DIRECT_OUTPUT 1)
   else()
-    SET_TARGET_PROPERTIES(openblt_shared PROPERTIES OUTPUT_NAME openblt CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(openblt_shared PROPERTIES
+            OUTPUT_NAME openblt
+            CLEAN_DIRECT_OUTPUT 1)
   endif()
 endif(BUILD_SHARED)
 
