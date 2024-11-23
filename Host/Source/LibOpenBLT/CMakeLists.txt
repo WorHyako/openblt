@@ -80,41 +80,12 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY} )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY} )
-endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+endforeach()
 
-#****************************************************************************************
-# Compiler flags
-#****************************************************************************************
-# Set platform specific compiler macros PLATFORM_XXX
-if(WIN32)
-  if(CMAKE_C_COMPILER_ID MATCHES GNU) 
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPLATFORM_WINDOWS -DPLATFORM_32BIT -D_CRT_SECURE_NO_WARNINGS -std=gnu99")
-    else()
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPLATFORM_WINDOWS -DPLATFORM_64BIT -D_CRT_SECURE_NO_WARNINGS -std=gnu99")
-    endif()
-  elseif(CMAKE_C_COMPILER_ID MATCHES MSVC)
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPLATFORM_WINDOWS -DPLATFORM_32BIT -D_CRT_SECURE_NO_WARNINGS")
-    else()
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPLATFORM_WINDOWS -DPLATFORM_64BIT -D_CRT_SECURE_NO_WARNINGS")
-    endif()
-  endif()
-elseif(UNIX)
-  if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPLATFORM_LINUX -DPLATFORM_32BIT -pthread -std=gnu99")
-  else()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPLATFORM_LINUX -DPLATFORM_64BIT -pthread -std=gnu99")
-  endif()
-endif(WIN32)
-
-# Configure a statically linked run-time library for msvc
-if(WIN32)
-  if(CMAKE_C_COMPILER_ID MATCHES MSVC)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-  endif()
-endif(WIN32)
-
+# ------------------ #
+#   Compiler flags   #
+# ------------------ #
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
 
 #***************************************************************************************
 # Includes
