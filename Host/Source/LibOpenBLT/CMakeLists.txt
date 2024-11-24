@@ -30,7 +30,6 @@ cmake_minimum_required(VERSION 3.15)
 # ------------------ #
 #   Compiler flags   #
 # ------------------ #
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdParty.cmake)
 
 project(LibOpenBLT
