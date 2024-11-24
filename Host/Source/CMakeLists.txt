@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
+project(OpenBlt)
+
 # ----------- #
 #   Options   #
 # ----------- #
@@ -45,11 +47,6 @@ set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 # ------------------ #
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
 
-# --------------- #
-#   lint macros   #
-# --------------- #
-add_subdirectory(lint)
-
 # ----------- #
 #   OpenBlt   #
 # ----------- #
@@ -64,3 +61,12 @@ add_subdirectory(BootCommander)
 #   SeedNKey   #
 # ------------ #
 add_subdirectory(SeedNKey)
+
+# --------------- #
+#   lint macros   #
+# --------------- #
+if (LINT_ENABLED)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lint)
+
+    add_subdirectory(lint)
+endif ()
