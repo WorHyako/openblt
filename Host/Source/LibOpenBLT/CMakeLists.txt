@@ -27,43 +27,18 @@
 # Specify the version being used as well as the language
 cmake_minimum_required(VERSION 3.15)
 
-# ------------------ #
-#   Compiler flags   #
-# ------------------ #
+# --------------- #
+#   Third party   #
+# --------------- #
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdParty.cmake)
 
 project(LibOpenBLT
         LANGUAGES C)
 
-# Set the output directory
-set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../..)
-
-# Set the output directory for the generic no-config case (e.g. with mingw)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-# Set the output directory for multi-config builds (e.g. msvc)
-foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
-    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-endforeach ()
-
 # ------------- #
 #   Port libs   #
 # ------------- #
 add_subdirectory(port)
-
-#***************************************************************************************
-# Search path
-#****************************************************************************************
-# Add the path of the shared library to the library search path. This way an (optional)
-# seed and key shared library file can simply be in the same directory as the LibOpenBLT
-# shared library.
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 
 # ----------- #
 #   OpenBlt   #
@@ -77,7 +52,7 @@ set_target_properties(openblt
         CLEAN_DIRECT_OUTPUT 1
         # Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
         # (including MinGW) does. Correct this here.
-        OUTPUT_NAME $<$<BOOL:${BUILD_SHARED_LIBS}>:lib>openblt)
+        OUTPUT_NAME $<$<STREQUAL:${CMAKE_C_COMPILER_ID},MSVC>:lib>openblt)
 
 target_include_directories(openblt
         PUBLIC
