@@ -35,22 +35,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdParty.cmake)
 project(LibOpenBLT
         LANGUAGES C)
 
-# Build debug version by default
-set(CMAKE_BUILD_TYPE "Debug")
-
-#****************************************************************************************
-# Options
-#****************************************************************************************
-# Add option with default value to enable the generation and building of the shared
-# library. By default it is turned on. It can be overridden on the command line when 
-# CMake is called using the following parameter: -DBUILD_SHARED=OFF
-option(BUILD_SHARED "Configurable to enable/disable building of the shared library" ON)
-
-# Add option with default value to enable the generation and building of the static
-# library. By default it is turned off. It can be overridden on the command line when 
-# CMake is called using the following parameter: -DBUILD_STATIC=ON
-option(BUILD_STATIC "Configurable to enable/disable building of the static library" OFF)
-
 # Set the output directory
 set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../..)
 
@@ -81,11 +65,19 @@ set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 
-# ------------------ #
-#   OpenBlt object   #
-# ------------------ #
-add_library(openblt OBJECT)
-add_library(openblt::obj ALIAS openblt)
+# ----------- #
+#   OpenBlt   #
+# ----------- #
+add_library(openblt)
+add_library(openblt::openblt ALIAS openblt)
+
+set_target_properties(openblt
+        PROPERTIES
+        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
+        CLEAN_DIRECT_OUTPUT 1
+        # Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
+        # (including MinGW) does. Correct this here.
+        OUTPUT_NAME $<$<BOOL:${BUILD_SHARED_LIBS}>:lib>openblt)
 
 target_include_directories(openblt
         PUBLIC
@@ -116,36 +108,3 @@ target_link_libraries(openblt
         PkgConfig::libusb
         openblt::port
         openblt::osLibs)
-
-# ---------------- #
-#   Lint targets   #
-# ---------------- #
-add_subdirectory(lint)
-
-# ------------------ #
-#   OpenBlt static   #
-# ------------------ #
-add_library(openblt_static STATIC)
-add_library(openblt::static ALIAS openblt_static)
-
-target_link_libraries(openblt_static
-        PUBLIC openblt)
-
-set_target_properties(openblt_static PROPERTIES
-        OUTPUT_NAME openblt
-        CLEAN_DIRECT_OUTPUT 1)
-
-# ------------------ #
-#   OpenBlt shared   #
-# ------------------ #
-add_library(openblt_shared SHARED)
-add_library(openblt::shared ALIAS openblt_shared)
-
-target_link_libraries(openblt_shared
-        PUBLIC openblt)
-
-# Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
-# (including MinGW) does. Correct this here.
-set_target_properties(openblt_shared PROPERTIES
-        OUTPUT_NAME $<$<STREQUAL:${CMAKE_C_COMPILER_ID},MSVC>:lib>openblt
-        CLEAN_DIRECT_OUTPUT 1)
