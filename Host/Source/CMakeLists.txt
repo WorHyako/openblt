@@ -30,6 +30,16 @@ foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
 endforeach ()
 
+# ---------------- #
+#   Search paths   #
+# ---------------- #
+# Add the path of the shared library to the library search path. This way an (optional)
+# seed and key shared library file can simply be in the same directory as the LibOpenBLT
+# shared library.
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH "\$ORIGIN")
+
 # ------------------ #
 #   Compiler flags   #
 # ------------------ #
