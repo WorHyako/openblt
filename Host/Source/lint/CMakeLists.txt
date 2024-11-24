@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 
-# Add option with default value to disable the generation of the PC-lint target. It can
-# be overridden on the command line when CMake is called using the following parameter:
-# -DLINT_ENABLED=ON
-option(LINT_ENABLED "Configurable to enable/disable the PC-lint target" OFF)
-
 # TODO: Scary code. Nothing to do with it now.
 # Only generate the PC-lint taget if the option is enabled. Use "make openblt_LINT" to
 # lint the project sources
