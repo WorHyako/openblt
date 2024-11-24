@@ -27,39 +27,8 @@
 # Specify the version being used as well as the language
 cmake_minimum_required(VERSION 3.15)
 
-#****************************************************************************************
-# Project configuration
-#****************************************************************************************
-# Specify the project name
 project(BootCommander
         LANGUAGES C)
-
-#****************************************************************************************
-# Directories
-#****************************************************************************************
-# Set the output directory
-set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../..)
-
-# Set the output directory for the generic no-config case (e.g. with mingw)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-# Set the output directory for multi-config builds (e.g. msvc)
-foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
-    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-endforeach (OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES)
-
-#***************************************************************************************
-# Search path
-#****************************************************************************************
-# Add the path of the executable to the library search path. This way the LibOpenBLT
-# shared library can simply be in the same directory as the BootCommander executable.
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 
 # ----------------- #
 #   BootCommander   #
