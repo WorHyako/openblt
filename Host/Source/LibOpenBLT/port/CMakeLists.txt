@@ -6,7 +6,7 @@ project(OpenBlt_Port
 # ---------------- #
 #   OpenBlt port   #
 # ---------------- #
-add_library(openblt_port EXCLUDE_FROM_ALL)
+add_library(openblt_port)
 add_library(openblt::port ALIAS openblt_port)
 
 file(GLOB_RECURSE CommonSources ${CMAKE_CURRENT_SOURCE_DIR}/common/*.c)
