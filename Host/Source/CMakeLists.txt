@@ -13,6 +13,26 @@ option(LINT_ENABLED "Configurable to enable/disable the PC-lint target" OFF)
 # CMake is called using the following parameter: -DBUILD_SHARED_LIBS=OFF
 option(BUILD_SHARED_LIBS "Configurable to enable/disable building of the shared library" ON)
 
+# -------------------- #
+#   Output directory   #
+# -------------------- #
+set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+
+# Set the output directory for the generic no-config case (e.g. with mingw)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
+# Set the output directory for multi-config builds (e.g. msvc)
+foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
+endforeach ()
+
+# ------------------ #
+#   Compiler flags   #
+# ------------------ #
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
 
 # --------------- #
@@ -29,3 +49,8 @@ add_subdirectory(LibOpenBLT)
 #   BootCommander   #
 # ----------------- #
 add_subdirectory(BootCommander)
+
+# ------------ #
+#   SeedNKey   #
+# ------------ #
+add_subdirectory(SeedNKey)
