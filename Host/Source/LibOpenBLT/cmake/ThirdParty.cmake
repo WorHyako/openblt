@@ -29,12 +29,10 @@ if (WIN32)
             ${SetupApi}
             ${Ws2_32}
             ${WinUsb})
-
 elseif (UNIX)
     # Additionally, the LibDL is needed for dynamic library loading.
     find_library(Dl REQUIRED
             NAMES dl)
-    add_library(OsLibs INTERFACE)
 
     target_link_libraries(OsLibs
             INTERFACE ${Dl})
