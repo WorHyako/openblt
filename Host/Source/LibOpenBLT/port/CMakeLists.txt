@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.15)
 project(OpenBlt_Port
         LANGUAGES C)
 
+# --------------- #
+#   Third party   #
+# --------------- #
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdParty.cmake)
+
 # ---------------- #
 #   OpenBlt port   #
 # ---------------- #
@@ -35,7 +40,9 @@ target_include_directories(openblt_port
         $<$<BOOL:${UNIX}>:${CMAKE_CURRENT_SOURCE_DIR}/linux/canif/socketcan>)
 
 target_link_libraries(openblt_port
-        PUBLIC openblt::osLibs)
+        PUBLIC
+        openblt::osLibs
+PkgConfig::libusb)
 
 target_compile_definitions(openblt_port
         PUBLIC

@@ -27,11 +27,6 @@
 # Specify the version being used as well as the language
 cmake_minimum_required(VERSION 3.15)
 
-# --------------- #
-#   Third party   #
-# --------------- #
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdParty.cmake)
-
 project(LibOpenBLT
         LANGUAGES C)
 
@@ -65,6 +60,5 @@ target_sources(openblt
 
 target_link_libraries(openblt
         PUBLIC
-        PkgConfig::libusb
         openblt::port
         openblt::osLibs)
