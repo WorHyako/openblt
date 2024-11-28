@@ -7,7 +7,7 @@ set(PC_LINT_EXECUTABLE "lint-nt.exe" CACHE STRING "full path to the pc-lint exec
 set(PC_LINT_CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/msvc" CACHE STRING "full path to the directory containing pc-lint configuration files")
 set(PC_LINT_USER_FLAGS "-b" CACHE STRING "additional pc-lint command line options -- some flags of pc-lint cannot be set in option files (most notably -b)")
 
-# a phony target which causes all available *_LINT targets to be executed
+# A phony target which causes all available *_LINT targets to be executed
 add_custom_target(ALL_LINT)
 
 include(CMakeParseArguments)
@@ -16,7 +16,7 @@ include(CMakeParseArguments)
 #
 # Takes a non-alias target and name for new lint target and generates a build target which can be used
 # for linting all files
-
+#
 # Parameters:
 #  - target :
 #  - name   :
@@ -31,16 +31,15 @@ include(CMakeParseArguments)
 #           PRIVATE ${Sources})
 #
 #
-#  include this file
+#   include this file
 #   list(APPEND CMAKE_MODULE_PATH /path/to/pc_lint.cmake)
 #   include(pc_lint)
 #
-#  and add a line to generate the main_LINT target
+#   and add a line to generate the main_LINT target
 #
-#  add_pc_lint(TARGET main NAME Main_Lint)
+#   add_pc_lint(TARGET main NAME Main_Lint)
 function(add_pc_lint)
-    set(multiValueArgs TARGETS)
-    set(oneValueArgs NAME)
+    set(oneValueArgs TARGET NAME)
 
     cmake_parse_arguments(ARG
             "${options}"
@@ -48,39 +47,37 @@ function(add_pc_lint)
             "${multiValueArgs}"
             ${ARGN})
 
-    foreach (Target ${ARG_TARGETS})
-        get_target_property(Target_Sources
-                ${Target} SOURCES)
+    get_target_property(Target_Sources
+            ${ARG_TARGET} SOURCES)
 
-        # Original include files
-        set(Include_Files $<TARGET_PROPERTY:${Target},INCLUDE_DIRECTORIES>)
-        # Append/prepend '\"' for each file
-        set(Include_Files $<LIST:TRANSFORM,${Include_Files},APPEND,\">)
-        set(Include_Files $<LIST:TRANSFORM,${Include_Files},PREPEND,\">)
-        # Prepend '-i' to each file
-        set(Include_Files $<LIST:TRANSFORM,${Include_Files},PREPEND,-i>)
-        # Remove empty '-i""' from list
-        set(Include_Files $<LIST:REMOVE_ITEM,${Include_Files},-i\"\">)
+    # Original include files
+    set(Include_Files $<TARGET_PROPERTY:${ARG_TARGET},INCLUDE_DIRECTORIES>)
+    # Append/prepend '\"' for each file
+    set(Include_Files $<LIST:TRANSFORM,${Include_Files},APPEND,\">)
+    set(Include_Files $<LIST:TRANSFORM,${Include_Files},PREPEND,\">)
+    # Prepend '-i' to each file
+    set(Include_Files $<LIST:TRANSFORM,${Include_Files},PREPEND,-i>)
+    # Remove empty '-i""' from list
+    set(Include_Files $<LIST:REMOVE_ITEM,${Include_Files},-i\"\">)
 
-        # Original definitions
-        set(Definitions $<TARGET_PROPERTY:${Target},COMPILE_DEFINITIONS>)
-        # Append/prepend '\"' for each definition
-        set(Definitions $<LIST:TRANSFORM,${Definitions},APPEND,\">)
-        set(Definitions $<LIST:TRANSFORM,${Definitions},PREPEND,\">)
-        # Prepend -d for each definition
-        set(Definitions $<LIST:TRANSFORM,${Definitions},PREPEND,-d>)
-        # Remove empty '-d' from list
-        set(Definitions $<LIST:REMOVE_ITEM,${Definitions},-\"\"d>)
+    # Original definitions
+    set(Definitions $<TARGET_PROPERTY:${ARG_TARGET},COMPILE_DEFINITIONS>)
+    # Append/prepend '\"' for each definition
+    set(Definitions $<LIST:TRANSFORM,${Definitions},APPEND,\">)
+    set(Definitions $<LIST:TRANSFORM,${Definitions},PREPEND,\">)
+    # Prepend -d for each definition
+    set(Definitions $<LIST:TRANSFORM,${Definitions},PREPEND,-d>)
+    # Remove empty '-d' from list
+    set(Definitions $<LIST:REMOVE_ITEM,${Definitions},-d\"\">)
 
-        foreach (Source_File ${Target_Sources})
-            list(APPEND Pc_Lint_Commands
-                    COMMAND ${PC_LINT_EXECUTABLE}
-                    -i"${PC_LINT_CONFIG_DIR}" std.lnt
-                    "-u" ${PC_LINT_USER_FLAGS}
-                    ${Include_Files}
-                    ${Definitions}
-                    ${Source_File})
-        endforeach ()
+    foreach (Source_File ${Target_Sources})
+        list(APPEND Pc_Lint_Commands
+                COMMAND ${PC_LINT_EXECUTABLE}
+                -i"${PC_LINT_CONFIG_DIR}" std.lnt
+                "-u" ${PC_LINT_USER_FLAGS}
+                ${Include_Files}
+                ${Definitions}
+                ${Source_File})
     endforeach ()
 
     # add a custom target consisting of all the commands generated above
