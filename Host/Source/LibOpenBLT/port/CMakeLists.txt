@@ -6,7 +6,8 @@ project(OpenBlt_Port
 # --------------- #
 #   Third party   #
 # --------------- #
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdParty.cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(ThirdParty)
 
 # ---------------- #
 #   OpenBlt port   #
@@ -16,9 +17,9 @@ add_library(openblt::port ALIAS openblt_port)
 
 file(GLOB_RECURSE CommonSources ${CMAKE_CURRENT_SOURCE_DIR}/common/*.c)
 if (WIN32)
-    file(GLOB_RECURSE Sources ${CMAKE_CURRENT_SOURCE_DIR}/windows/*c)
+    file(GLOB_RECURSE Sources ${CMAKE_CURRENT_SOURCE_DIR}/windows/*.c)
 elseif (UNIX)
-    file(GLOB_RECURSE Sources ${CMAKE_CURRENT_SOURCE_DIR}/linux/*c)
+    file(GLOB_RECURSE Sources ${CMAKE_CURRENT_SOURCE_DIR}/linux/*.c)
 endif ()
 
 target_sources(openblt_port
@@ -42,7 +43,7 @@ target_include_directories(openblt_port
 target_link_libraries(openblt_port
         PUBLIC
         openblt::osLibs
-PkgConfig::libusb)
+        PkgConfig::libusb)
 
 target_compile_definitions(openblt_port
         PUBLIC

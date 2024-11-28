@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(Lint)
+project(Lint
+        LANGUAGES NONE)
 
-include(pc_lint.cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+include(pc_lint)
 
 # ---------------- #
 #   openblt_LINT   #

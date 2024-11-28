@@ -15,22 +15,15 @@ option(LINT_ENABLED "Configurable to enable/disable the PC-lint target" OFF)
 # CMake is called using the following parameter: -DBUILD_SHARED_LIBS=OFF
 option(BUILD_SHARED_LIBS "Configurable to enable/disable building of the shared library" ON)
 
-# -------------------- #
-#   Output directory   #
-# -------------------- #
-set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+# Add option with default value to set output directory for target's result file.
+# It can be overridden on the command line when CMake is called using the following
+# parameter: -DBINARY_OUTPUT_DIRECTORY=path
+set(BINARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../.." CACHE STRING "Directory for result library and executable files")
 
 # Set the output directory for the generic no-config case (e.g. with mingw)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
-# Set the output directory for multi-config builds (e.g. msvc)
-foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
-    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_OUTPUT_DIRECTORY})
-endforeach ()
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIRECTORY})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIRECTORY})
 
 # ---------------- #
 #   Search paths   #
@@ -45,7 +38,8 @@ set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 # ------------------ #
 #   Compiler flags   #
 # ------------------ #
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(CompilerFlags)
 
 # ----------- #
 #   OpenBlt   #
