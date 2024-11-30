@@ -9,14 +9,14 @@ include(pc_lint)
 # ---------------- #
 #   openblt_LINT   #
 # ---------------- #
-add_pc_lint(TARGET openblt NAME openblt)
+add_pc_lint(TARGET openblt NAME openblt_LINT)
 
 # ----------------------- #
 #    BootCommander_LINT   #
 # ----------------------- #
-add_pc_lint(TARGET BootCommander NAME BootCommander)
+add_pc_lint(TARGET BootCommander NAME BootCommander_LINT)
 
 # ----------------- #
 #   seednkey_LINT   #
 # ----------------- #
-add_pc_lint(TARGET seednkey NAME seednkey)
+add_pc_lint(TARGET seednkey NAME seednkey_LINT)

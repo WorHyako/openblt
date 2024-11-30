@@ -37,7 +37,7 @@ project(BootCommander
 add_executable(BootCommander)
 
 target_sources(BootCommander
-        PRIVATE main.c)
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/main.c)
 
 target_link_libraries(BootCommander
         PRIVATE openblt::openblt)

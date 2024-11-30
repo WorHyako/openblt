@@ -38,15 +38,11 @@ add_library(seednkey)
 add_library(openblt::seednkey ALIAS seednkey)
 
 target_sources(seednkey
-        PRIVATE seednkey.c)
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/seednkey.c)
 
 target_include_directories(seednkey
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 set_target_properties(seednkey
         PROPERTIES
-        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
-        CLEAN_DIRECT_OUTPUT 1
-        # Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
-        # (including MinGW) does. Correct this here.
-        OUTPUT_NAME $<$<STREQUAL:${CMAKE_C_COMPILER_ID},MSVC>:lib>seednkey)
+        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})

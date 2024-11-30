@@ -81,7 +81,7 @@ function(add_pc_lint)
     endforeach ()
 
     # add a custom target consisting of all the commands generated above
-    add_custom_target(${ARG_NAME}_LINT ${Pc_Lint_Commands} COMMAND_EXPAND_LISTS VERBATIM)
+    add_custom_target(${ARG_NAME} ${Pc_Lint_Commands} COMMAND_EXPAND_LISTS VERBATIM)
     # make the ALL_LINT target depend on each and every *_LINT target
-    add_dependencies(ALL_LINT ${ARG_NAME}_LINT)
+    add_dependencies(ALL_LINT ${ARG_NAME})
 endfunction()

@@ -22,6 +22,10 @@ elseif (UNIX)
     file(GLOB_RECURSE Sources ${CMAKE_CURRENT_SOURCE_DIR}/linux/*.c)
 endif ()
 
+set_target_properties(openblt_port
+        PROPERTIES
+        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
+
 target_sources(openblt_port
         PRIVATE
         ${CommonSources}

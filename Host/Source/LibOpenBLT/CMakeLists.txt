@@ -43,11 +43,7 @@ add_library(openblt::openblt ALIAS openblt)
 
 set_target_properties(openblt
         PROPERTIES
-        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
-        CLEAN_DIRECT_OUTPUT 1
-        # Microsoft Visual Studio does not add "lib" to the name of the DLL, whereas GCC
-        # (including MinGW) does. Correct this here.
-        OUTPUT_NAME $<$<STREQUAL:${CMAKE_C_COMPILER_ID},MSVC>:lib>openblt)
+        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
 
 target_include_directories(openblt
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
