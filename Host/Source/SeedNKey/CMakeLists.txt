@@ -42,7 +42,3 @@ target_sources(seednkey
 
 target_include_directories(seednkey
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-
-set_target_properties(seednkey
-        PROPERTIES
-        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})

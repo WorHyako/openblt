@@ -41,18 +41,13 @@ add_subdirectory(port)
 add_library(openblt)
 add_library(openblt::openblt ALIAS openblt)
 
-set_target_properties(openblt
-        PROPERTIES
-        POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
-
 target_include_directories(openblt
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB Sources ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 
 target_sources(openblt
-        PRIVATE
-        ${Sources})
+        PRIVATE ${Sources})
 
 target_link_libraries(openblt
         PUBLIC
